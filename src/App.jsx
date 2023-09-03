@@ -57,6 +57,7 @@ const App = () => {
 
   return (
     <div className="container">
+      <h3>Use ctrl/cmd+click to open multiple tabs at once</h3>
       <input
         type="text"
         className="form-control mt-3"
