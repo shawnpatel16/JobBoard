@@ -35,21 +35,29 @@ const App = () => {
     );
   }, [search, bookmarks]);
 
-  const visitBookmark = (index) => {
-    const now = new Date().toLocaleString();
-    const newBookmarks = [...bookmarks];
-    newBookmarks[index].lastVisited = now;
+const visitBookmark = (companyName) => {
+  const now = new Date().toLocaleString();
+  const newBookmarks = [...bookmarks];
 
-    // Save last visited info to localStorage
-    const lastVisitedInfo = JSON.parse(
-      localStorage.getItem("lastVisited") || "{}"
-    );
-    lastVisitedInfo[newBookmarks[index].companyName] = now;
-    localStorage.setItem("lastVisited", JSON.stringify(lastVisitedInfo));
+  // Find the index of the clicked bookmark based on the company name
+  const index = newBookmarks.findIndex(
+    (bookmark) => bookmark.companyName === companyName
+  );
 
-    setBookmarks(newBookmarks);
-    window.open(newBookmarks[index].link, "_blank");
-  };
+  if (index === -1) return; // Company not found, do nothing
+
+  newBookmarks[index].lastVisited = now;
+
+  // Save last visited info to localStorage
+  const lastVisitedInfo = JSON.parse(
+    localStorage.getItem("lastVisited") || "{}"
+  );
+  lastVisitedInfo[newBookmarks[index].companyName] = now;
+  localStorage.setItem("lastVisited", JSON.stringify(lastVisitedInfo));
+
+  setBookmarks(newBookmarks);
+  window.open(newBookmarks[index].link, "_blank");
+};
 
   const capitalizeFirstLetter = (string) => {
     return string.charAt(0).toUpperCase() + string.slice(1);
@@ -71,7 +79,7 @@ const App = () => {
             key={index}
             className="card mb-1"
             style={{ cursor: "pointer" }}
-            onClick={() => visitBookmark(index)}
+            onClick={() => visitBookmark(bookmark.companyName)}
           >
             <div className="card-body p-2">
               <h5 className="card-title m-0">
